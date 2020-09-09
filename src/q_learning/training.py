@@ -159,18 +159,8 @@ def train(dataset, graphs, config):
 
     if os.path.exists(cmd_args.model_path) and os.path.getsize(cmd_args.model_path) > 0:
         model = torch.load(cmd_args.model_path)
-        # memory = model.memory
-        # decoder = model.decoder
-        # policy = model.policy
-        # optimizer = model.optimizer
-        # current_it = model.current_it
         DC.steps_done = model.steps_done
-        
     else: 
-        
-        # decoder = ClauseDecoder()
-        # decoder = GlobalDecoder(dataset.attr_encoder, )
-        # decoder_name = "ClauseDecoder"
         decoder_name = "GlobalDecoder"
         policy = DQPolicy(dataset, decoder_name)
         decoder = policy.decoder
@@ -180,7 +170,6 @@ def train(dataset, graphs, config):
         DC.steps_done = 0
         model = Learning_Model(decoder, policy, memory, optimizer, current_it, DC.steps_done)
 
-    # target_decoder = type(model.decoder)()
     decoder_name = str(type(model.policy.decoder).__name__)
     target = DQPolicy(dataset, decoder_name)
     target_decoder = target.decoder

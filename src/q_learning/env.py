@@ -23,26 +23,6 @@ class State():
         self.idx_selected = idx_selected
         self.action_dict = action_dict
 
-    # def get_clauses_idx(self):   
-    #     names = self.graph.get_nodes()
-    #     clauses_idx = []
-    #     for clause in self.actions:
-    #         clause_idx = []
-    #         for element in clause:
-    #             if type(element) == int:
-    #                 element = f"var_{element}"
-
-    #             if element == "right":
-    #                 element = "center_right"
-    #             if element == "behind":
-    #                 element = "center_behind"
-                    
-    #             if element in names:
-    #                 clause_idx.append(names.index(element))
-
-    #         clauses_idx.append(clause_idx)
-    #     return clauses_idx
-
     def get_clauses_idx(self):   
         names = self.graph.get_nodes()
         name_dict = {}
@@ -161,8 +141,6 @@ class Env():
         self.possible = False 
     
     def get_state(self):
-        
-
         self.unreachable = self.unreachable_dict[str(sorted(self.ref))]
         unreachable = self.idx_selected + self.unreachable
         return State(self.actions, self.data, self.graph, self.state, self.action_dict, unreachable)

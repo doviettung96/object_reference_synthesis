@@ -79,13 +79,8 @@ class ClauseDecoder(nn.Module):
         binary_rep = torch.cat((local_embedding[binary_clauses_idx, :], global_embedding_exp), dim=1).view(len(binary_clauses_idx), 4 * global_embedding.shape[-1])
         x.append(self.common_layer(self.ternary_op_layer(binary_rep)).view(-1))
 
-        # logging.info(f"local embedding: {local_embedding}")
-        
         x = torch.cat(x)
         x = x.view(1, x.shape[-1])
-
-        # x2 = local_embedding[]
-        # x = F.softmax(x)
 
         return x
 
@@ -180,23 +175,6 @@ class NodeDecoder(nn.Module):
                 return key 
         return 
 
-    # def get_clause_idx(self, env, clause):
-    #     clauses = env.actions
-
-    #     for ct, cl in enumerate(clauses):
-    #         if len(cl) == len(clause):
-    #             for e1, e2 in cl, clauses:
-    #                 if type(e1) == int and not type(e2) == int:
-    #                     e1 = f"var_{e1}"
-    #                 elif not type(e1) == int and  type(e2) == int:
-    #                     e2 = f"var_{e2}"
-
-    #                 if not (e1 == e2):
-    #                     continue
-                    
-    #                 return ct 
-
-
     def forward(self, graph_embedding, state):
 
         graph = state.graph
@@ -209,7 +187,6 @@ class NodeDecoder(nn.Module):
         node_embeddings = torch.stack([torch.cat((local_embedding, self.state.squeeze(0))) for local_embedding in local_embeddings])
 
         var1_locs = self.get_var_locs(graph)
-        # var1_names = graph.vars.keys()
         var1_probs, var1_embeddings = self.get_values(node_embeddings, graph, var1_locs, self.var1_score_layer)
         var1_states = [ self.gru_cell(var1_embedding.reshape(1, -1)[:, :cmd_args.hidden_dim], self.state) for var1_embedding in var1_embeddings ]
 

@@ -95,14 +95,23 @@ class BinaryClause:
 # n_vars: int (number of variables)
 # n_objects: int (number of objects)
 # return: [[int]]
+# 2, 2-> [[0, 0], [0, 1], [1, 0], [1, 1]]
+# 2, 3-> [[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2]]
 def _build_bindings(n_vars, n_objects):
     bindings = [[]]
-    for _ in range(n_vars):
+    for each_var in range(n_vars):
         next_bindings = []
         for binding in bindings:
-            for object in range(n_objects):
-                next_bindings.append(binding + [object])
+            # initialy, there is only one binding: []
+            # as we proceed, bindings are added
+            # some how, it will have to check with all previous
+            # bindings?
+
+            for each_obj in range(n_objects):
+                next_bindings.append(binding + [each_obj])
         bindings = next_bindings
+        # bindings is used as a mean to concatenate all previous arrays
+        # for predecessor objects.
     return [Binding(binding) for binding in bindings]
 
 # unary_names: [str]
@@ -125,7 +134,7 @@ def _build_clauses(unary_names, binary_names, n_vars):
 # n_vars: int (number of variables)
 # n_objects: int (number of objects)
 def _build(ground, ground_uncertain, n_vars, n_objects):
-    bindings = _build_bindings(n_vars, n_objects)
+    bindings = _build_bindings(n_vars, n_objects) # for each binding, the var -> object mapping is different
     unary_names = set(ground.unary.keys()).union(set(ground_uncertain.unary.keys()))
     binary_names = set(ground.binary.keys()).union(set(ground_uncertain.binary.keys()))
     clauses = _build_clauses(unary_names, binary_names, n_vars)
@@ -136,10 +145,10 @@ def _build(ground, ground_uncertain, n_vars, n_objects):
 
     binding_lookup = np.zeros([n_vars, n_objects, len(bindings)])
     for var in range(n_vars):
-        for object in range(n_objects):
+        for each_obj in range(n_objects):
             for j, binding in enumerate(bindings):
-                if binding.binding[var] == object:
-                    binding_lookup[var, object, j] = 1
+                if binding.binding[var] == each_obj:
+                    binding_lookup[var, each_obj, j] = 1
 
     semantics_lookup = np.zeros([len(clauses), len(bindings)], dtype=np.int)
     for i, clause in enumerate(clauses):

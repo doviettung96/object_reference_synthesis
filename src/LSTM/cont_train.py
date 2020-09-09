@@ -62,7 +62,6 @@ def episode(policy, data_point, graph, eps, attr_encoder, config, phase="train")
         env = policy(env)
 
         if cmd_args.sub_loss:
-
             if not env.is_finished():
                 retrain_prob =  (env.obj_poss_left[-2] - env.obj_poss_left[-1])/env.obj_poss_left[0]
                 retrain_prob = max(0.0, retrain_prob)
@@ -201,7 +200,8 @@ if __name__ == '__main__':
     start_time = time.time()
     for ct, datapoint in enumerate(dataloader):
         logging.info (ct)
-        cont_single(ct, datapoint, refrl.policy, graphs, cont_res_dir, refrl.dataset.attr_encoder, refrl.config)
+        generated_programs = cont_single(ct, datapoint, refrl.policy, graphs, cont_res_dir, refrl.dataset.attr_encoder, refrl.config)
+        print('Generated programs', generated_programs)
     end_time = time.time()
 
     logging.info (f"finished_training in {end_time - start_time}")

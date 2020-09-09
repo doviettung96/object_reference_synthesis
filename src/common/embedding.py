@@ -46,15 +46,6 @@ def graph2data(graph, attr_encoder):
     edge_attrs = torch.tensor(attr_encoder.get_embedding([f"edge_{tp}" for tp in edge_types]))
     return Data(torch.tensor(x), torch.tensor(edge_index), torch.tensor(edge_attrs), graph.target_id)
     
-# @add_method(Data)
-# def update_data(self, graph, attr_encoder):
-#     x = attr_encoder.get_embedding( [ node.name for node in graph.nodes])
-#     edge_index, edge_types = graph.get_edge_info()
-#     edge_attrs = torch.tensor(attr_encoder.get_embedding(edge_types))
-#     self.edge_attrs = edge_attrs
-#     self.edge_index = torch.tensor(edge_index)
-#     self.x = torch.tensor(x)
-
 class SceneDataset(InMemoryDataset):
     def __init__(self, root, config, transform=None, pre_transform=None):
         self.config = config
